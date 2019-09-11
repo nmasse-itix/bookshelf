@@ -1,0 +1,114 @@
+attributeType ( 1.3.6.1.4.14000.1.1.6 NAME 'frItixId'
+	DESC 'An abstract type which represents an ID'
+	EQUALITY integerMatch
+	ORDERING integerOrderingMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 )
+
+attributeType ( 1.3.6.1.4.14000.1.1.1 NAME 'frItixNextLocalDocumentId'
+	DESC 'The next available localDocumentId in a bookshelf'
+	SUP frItixId
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.2 NAME 'frItixNextGlobalId'
+	DESC 'The next available globalId in a bookshelf'
+	SUP frItixId
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.3 NAME 'frItixGlobalId'
+	DESC 'A globalId identifies a document within a bookshelf'
+	SUP frItixId
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.4 NAME 'frItixTitle'
+	DESC 'The title of a document'
+	SUP name
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.5 NAME 'frItixAuthor'
+	DESC 'The author of a document'
+	SUP cn )
+
+attributeType ( 1.3.6.1.4.14000.1.1.7 NAME 'frItixCollection'
+	DESC 'The name of the collection of the book'
+	SUP name
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.8 NAME 'frItixPublisherName'
+	DESC 'The name of the publisher of the book'
+	SUP name
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.9 NAME 'frItixPages'
+	DESC 'The number of pages in the book'
+	EQUALITY integerMatch
+	ORDERING integerOrderingMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.10 NAME 'frItixEditionNumber'
+	DESC 'The edition number of the book (1st, 2nd, etc.)'
+	EQUALITY integerMatch
+	ORDERING integerOrderingMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.11 NAME ( 'frItixISBN' 'frItixISBN10' )
+	DESC 'The International Standard Book Number (10) of a book'
+	EQUALITY caseIgnoreMatch
+	ORDERING caseIgnoreOrderingMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{10}
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.12 NAME 'frItixISBN13'
+	DESC 'The International Standard Book Number (13) of a book'
+	EQUALITY caseIgnoreMatch
+	ORDERING caseIgnoreOrderingMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{13}
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.13 NAME 'frItixPublicationDate'
+	DESC 'The publication date of the book'
+	EQUALITY integerMatch
+	ORDERING integerOrderingMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.14 NAME ( 'frItixCategoryId' )
+	DESC 'The Dewey category number'
+	EQUALITY caseExactMatch
+	ORDERING caseExactOrderingMatch
+        SUBSTR caseExactSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.14000.1.1.15 NAME ( 'frItixCategoryName' )
+	DESC 'The Dewey category name'
+	EQUALITY caseIgnoreMatch
+	ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+objectClass ( 1.3.6.1.4.14000.1.3.1 NAME 'frItixBookshelf'
+	DESC 'A bookshelf'
+	SUP top
+	MUST ( frItixNextLocalDocumentId $ frItixNextGlobalId ) )
+
+objectClass ( 1.3.6.1.4.14000.1.3.2 NAME 'frItixDocument'
+	DESC 'A document'
+	SUP top
+	ABSTRACT 
+	MUST ( frItixGlobalId $ frItixTitle )
+	MAY ( frItixAuthor $ organizationName ) )
+
+objectClass ( 1.3.6.1.4.14000.1.3.3 NAME 'frItixBook'
+	DESC 'A book'
+	SUP frItixDocument
+	MAY ( frItixCollection $ frItixPublisherName $ frItixPublicationDate $ frItixPages $ frItixEditionNumber $ frItixISBN10 $ frItixISBN13 ) )
+
+
+objectClass ( 1.3.6.1.4.14000.1.3.4 NAME 'frItixCategory'
+	DESC 'A Dewey Category'
+	SUP top
+	MUST ( frItixCategoryId $ frItixCategoryName ) )
+
